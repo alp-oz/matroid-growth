@@ -1956,5 +1956,3 @@ def run_late_exchange_analysis(steps=3000, initial_rank=50, fixed_k=3):
     plt.show()
 
 run_late_exchange_analysis()
-
-# Latest version with basis exchange.
