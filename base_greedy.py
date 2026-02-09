@@ -5,15 +5,29 @@ Logic: Basis Exchange Reproduction
 Branch: basis_exchange
 """
 import numpy as np
-def run_greedy_model(vectors, rank_limit):
+
+def is_independent(basis, vector):
+    if len(basis) == 0: return not np.all(vector == 0)
+    matrix = np.array(basis + [vector])
+    # In binary matroids, rank is checked via Gaussian elimination
+    return np.linalg.matrix_rank(matrix) > len(basis)
+
+def run_greedy():
+    RANK = 3
     basis = []
-    for v in vectors:
-        # Check if we have room AND if v is independent
-        if len(basis) < rank_limit:
+    # 10 random 5D vectors
+    universe = [np.random.randint(0, 2, 5) for _ in range(10)]
+
+    print("--- Starting Greedy Model ---")
+    for i, v in enumerate(universe):
+        if len(basis) < RANK:
             if is_independent(basis, v):
                 basis.append(v)
-                print("Added to basis.")
+                print(f"Vector {i}: Added.")
         else:
-            # In the old model, once it's full, we just ignore new vectors
-            print("Basis full. Ignoring candidate.")
-    return basis
+            print(f"Vector {i}: Basis full. Ignored.")
+    
+    print(f"Final Greedy Basis size: {len(basis)}")
+
+if __name__ == "__main__":
+    run_greedy()
