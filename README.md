@@ -51,3 +51,32 @@ While the algorithm processes n elements, the total running time is O(n⋅r2).
 4. The "Greedy" Limitation
 
 This model is static. Once an element is accepted into the Basis, it is never removed. If a high-weight element appears late in the sequence and the Basis is already at full rank, the element is rejected—even if it is more valuable than existing members. This limitation serves as the primary motivation for the Late Exchange Logic developed in Phase 3 of this project.
+
+Phase 2: Lawler’s Circuit Mapping (1975)
+
+File: lawler_circuit_map.py
+
+Mathematical Concept: The Fundamental Circuit C(B,y)
+
+While the Greedy model acts as a binary gatekeeper, the Circuit Map identifies the specific internal conflicts within the matroid. This phase transitions the project from simple filtering to structural analysis.
+1. Identifying the "Blockage"
+
+In a binary matroid, if an element y is dependent on the Basis B, there exists a unique minimal set of vectors in B that XOR-sum to y. This set is the Fundamental Circuit.
+
+    The Logic: We solve the linear system B⋅c=y(mod2).
+
+    The Result: The indices where c=1 are the "witnesses" that prove y is redundant.
+
+2. The Exchange Property
+
+According to the Strong Basis Exchange Property, any element x in the circuit C(B,y) is a valid candidate for eviction.
+
+    Theorem: Replacing any x∈C(B,y)∖{y} with y maintains the rank r and results in a new valid Basis B′.
+
+3. Transition to Late Exchange
+
+This circuit mapping is the "engine" for our final model. It allows the algorithm to be selective:
+
+    Greedy: "The basis is full, reject y."
+
+    Lawler: "The basis is full because of elements {x1​,x2​,x3​}. If y is more valuable than any of them, we can swap."
