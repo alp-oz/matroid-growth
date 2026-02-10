@@ -80,3 +80,34 @@ This circuit mapping is the "engine" for our final model. It allows the algorith
     Greedy: "The basis is full, reject y."
 
     Lawler: "The basis is full because of elements {x1​,x2​,x3​}. If y is more valuable than any of them, we can swap."
+
+The Late Exchange Algorithm (Dynamic)
+
+File: late_exchange_model.py
+
+Core Concept: Online Weight Maximization via Circuit Augmentation
+
+This model represents the final transition from a static selection process to a Dynamic State-Machine. Unlike the previous models, this algorithm does not require a pre-sorted ground set and handles elements in a live "stream."
+1. Mathematical Formalization
+
+    Initial State: The Basis B0​=∅ with total weight W0​=0.
+
+    The Leaderboard Effect: The Dimension (d) acts as a fixed capacity constraint. Once ∣B∣=d, the Basis enters a competitive state.
+
+    Weight (w): Acts as the Selection Pressure. It is the metric used to resolve conflicts within a circuit.
+
+2. Transition Rules
+
+For every arriving element (et​,wt​), the algorithm applies one of two rules:
+
+    Rule I: Augmentation If the element is linearly independent, it is immediately added to the Basis.
+    Bt​=Bt−1​∪{et​}
+
+    Rule II: Exchange If the element creates a dependency, the unique Fundamental Circuit C(Bt−1​,et​) is identified. We then find the "weakest link" x∗ in that circuit:
+    x∗=argminx∈C∖{et​}​w(x)
+
+    If w(et​)>w(x∗), we perform a swap. The Basis "evolves" by evicting x∗ to make room for the higher-weight et​.
+
+3. Why this is "Dynamic"
+
+This model is self-correcting. In the Edmonds (1971) model, a low-weight element accepted early could block a high-weight element later. In this model, the Late Exchange logic ensures that the Basis always contains the "optimal" set of vectors for the prefix of the stream seen so far.
