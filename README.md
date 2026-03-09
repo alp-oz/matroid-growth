@@ -1,6 +1,20 @@
 Matroid Phase Transition Framework
 
 A modular Python suite for simulating the growth of binary matroids and detecting the phase boundary between Graphic (network-representable) and Algebraic (vector-space-only) structures.
+
+# Matroid Growth
+
+Research tools for matroid growth simulations.
+
+## Installation
+Clone the repo and install in editable mode:
+```bash
+git clone [https://github.com/alp-oz/matroid-growth.git](https://github.com/alp-oz/matroid-growth.git)
+cd matroid-growth
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
+
 📂 Project Architecture
 matroid_core/
 
@@ -84,3 +98,5 @@ If your simulations result in P[F7​]=1.0 across all parameter ranges, consider
 
     Use tags to mark stable mathematical "Golden States":
     git tag -a v1.2 -m "Modular engine with stats integration"
+
+
