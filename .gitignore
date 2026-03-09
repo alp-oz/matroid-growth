@@ -1,8 +1,48 @@
-.venv/
-.vscode/
-__pycache__/
-*.pycvenv/
-.venv/
+venv/
 __pycache__/
 *.pyc
+experiments/ex_*
+experiments/heatmap_*
+.DS_Store
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Environments
+venv/
 .env
+
+# Research Results
+results/
+experiments/heatmap_*/
+*.png
+*.log
+
+# Exclude specific test scripts
+test_import.py
+test_*.py
+
+# Exclude local environment/results
+__pycache__/
+venv/
+results/
+
+# Exclude entire result directories
+results/
+experiments/heatmap_*/
+experiments/transition_*/
+
+# Exclude specific file types generated during research
+*.log
+*.csv
+*.png
+*.pdf
+*.npy
+
+# Exclude all experiment result folders starting with 'ex_'
+ex_*/
+heatmap_*/
+
+experiments/run_*/
+experiments/start_*/
