@@ -1,48 +1,32 @@
-venv/
-__pycache__/
-*.pyc
-experiments/ex_*
-experiments/heatmap_*
-.DS_Store
-
-# Python bytecode
-__pycache__/
-*.py[cod]
-
-# Environments
+# --- Python & Environment ---
 venv/
 .env
-
-# Research Results
-results/
-experiments/heatmap_*/
-*.png
-*.log
-
-# Exclude specific test scripts
-test_import.py
-test_*.py
-
-# Exclude local environment/results
 __pycache__/
-venv/
-results/
+*.pyc
+*.py[cod]
+build/
+dist/
+*.egg-info/
+.DS_Store
 
-# Exclude entire result directories
-results/
-experiments/heatmap_*/
-experiments/transition_*/
-
-# Exclude specific file types generated during research
-*.log
-*.csv
+# --- Research Data & Plotting (Global) ---
 *.png
 *.pdf
+*.csv
+*.log
 *.npy
+results/
 
-# Exclude all experiment result folders starting with 'ex_'
+# --- Experiment Folder Rules ---
+# This catches all your specific research sub-folders
+experiments/ex_*
+experiments/heatmap_*/
+experiments/transition_*/
+experiments/run_*/
+experiments/start_*/
 ex_*/
 heatmap_*/
 
-experiments/run_*/
-experiments/start_*/
+# --- Test Scripts ---
+test_import.py
+test_*.py
