@@ -91,8 +91,8 @@ def run_research_suite():
     plt.tight_layout()
     plt.show()
 
-if __name__ == "__main__":
-    run_research_suite()
-
 def main():
     run_research_suite()
+
+if __name__ == "__main__":
+    main()
