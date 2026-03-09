@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matroid-growth"
+version = "0.1.0"
+description = "Simulation and analysis of matroid growth processes"
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib"
+]
+
+[tool.setuptools]
+packages = ["matroid_core", "analysis", "experiments"]
