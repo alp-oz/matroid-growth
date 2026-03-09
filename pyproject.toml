@@ -14,3 +14,7 @@ dependencies = [
 
 [tool.setuptools]
 packages = ["matroid_core", "analysis", "experiments"]
+py-modules = ["batch_runner"]
+
+[project.scripts]
+run-matroid = "batch_runner:main"

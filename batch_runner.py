@@ -12,16 +12,16 @@ from analysis.circuits import estimate_girth, get_circuit_participation_by_birth
 # 🎛️ THE RESEARCH KNOBS
 # =================================================================
 CONFIG = {
-    "N_STEPS": 150,       
-    "BETA": 0.4,           
+    "N_STEPS": 3000,       
+    "BETA": 0.8,           
     
     # K_SETTING determines how many existing rows a new column connects to.
     # 1. FIXED: Set to an integer (e.g., 3) to choose exactly K rows.
     # 2. RANDOM: Set to ("poisson", lambda) to pick K from a Poisson distribution.
     "K_SETTING": 3,        
     
-    "GAMMA": 0.2,          
-    "START_R": 300,        
+    "GAMMA": 0.05,          
+    "START_R": 50,        
     "WINDOW_SIZE": 100     
 }
 
@@ -92,4 +92,7 @@ def run_research_suite():
     plt.show()
 
 if __name__ == "__main__":
+    run_research_suite()
+
+def main():
     run_research_suite()
