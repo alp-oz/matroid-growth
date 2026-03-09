@@ -1,70 +1,86 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matroid_core.simulator import MatroidSimulator
-from matroid_core.utils import convert_to_bitsets, check_fano_minor, calculate_binary_rank
 
-def run_beta_sweep():
-    print("--- Batch Experiment: Beta Sweep ($\beta$ vs. $F_7$ Probability) ---")
+# --- CORE IMPORTS ---
+from matroid_core.engine import MatroidEngine
+from analysis.stats import get_zipf_distribution
+from analysis.connectivity import get_bipartite_connectivity
+from analysis.circuits import get_circuit_participation_by_birth
+
+# =================================================================
+# 🎛️ THE RESEARCH KNOBS
+# =================================================================
+# INSTRUCTIONS for K_SETTING:
+# 1. For fixed weight:    Set to an integer (e.g., 4)
+# 2. For Poisson weight: Set to ("poisson", lambda) where lambda is the mean
+# =================================================================
+CONFIG = {
+    "N_STEPS": 150,       # Reduced from 5000 (Stop before it clogs)
+    "BETA": 0.4,           # Reduced from 0.85 (Less clumping)
+    "K_SETTING": 3,        # Fixed at 3 (Sparse "Wheel-like" connections)
+    "GAMMA": 0.2,          # Reduced from 0.5 (Keep row discovery active longer)
+    "START_R": 300,        # Increased from 100 (More room to breathe)
+    "WINDOW_SIZE": 100     # Smaller window for higher resolution
+}
+
+def run_research_suite():
+    print(f"🚀 Initializing Matroid Growth...")
+    print(f"Mode: {CONFIG['K_SETTING']} | Beta: {CONFIG['BETA']}")
+
+    # 1. GENERATE: The Matroid
+    engine = MatroidEngine(
+        n_steps=CONFIG["N_STEPS"],
+        beta=CONFIG["BETA"],
+        k_params=CONFIG["K_SETTING"],
+        gamma=CONFIG["GAMMA"],
+        start_r=CONFIG["START_R"]
+    )
+    data = engine.run()
     
-    # --- CONTROL KNOBS (Constants) ---
-    n_steps = 3000      # Size of each simulation
-    gamma = 0.7         # Growth decay
-    swaps = 30          # Refinement strength
-    iterations = 15     # Number of trials per beta point (for averaging)
+    # 2. ANALYZE: Statistics & Temporal Trends
+    # --- THIS IS THE CRITICAL BLOCK ---
+    ranks, counts = get_zipf_distribution(data['row_usage'])
+    conn = get_bipartite_connectivity(data)
     
-    # --- THE VARIABLE KNOB (Beta) ---
-    beta_values = np.linspace(0.0, 2.0, 11)  # 0.0, 0.2, 0.4 ... 2.0
+    # This generates the data for your "Banal Column" proof
+    temporal_nullity = get_circuit_participation_by_birth(
+        data, 
+        window_size=CONFIG["WINDOW_SIZE"]
+    )
+    # ----------------------------------
+
+    print(f"✅ Simulation Complete.")
+    print(f"Final Basis (R): {data['R_final']}")
+    print(f"Active Connectivity: {conn['active_giant_fraction']:.2%}")
+    print(f"Total Components: {conn['total_components']} (Orphans: {conn['orphan_rows']})")
+
+    # 3. RESEARCH-GRADE PLOTTING
+    plt.style.use('bmh')
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
     
-    fano_probabilities = []
-    rank_ratios = []
-
-    for b in beta_values:
-        print(f"Testing Beta = {b:.1f}...", end=" ")
-        fano_count = 0
-        ratios = []
-        
-        for _ in range(iterations):
-            # Run simulation
-            sim = MatroidSimulator(n_steps=n_steps, gamma=gamma, beta=b, swaps=swaps).run()
-            bits = convert_to_bitsets(sim.col_to_rows)
-            
-            # Check for Fano minor
-            if check_fano_minor(bits):
-                fano_count += 1
-            
-            # Calculate Matroid Rank ratio
-            rank = calculate_binary_rank(bits, sim.curr_r)
-            ratios.append(rank / sim.curr_r)
-            
-        fano_probabilities.append(fano_count / iterations)
-        rank_ratios.append(np.mean(ratios))
-        print(f"-> P[Fano] = {fano_count/iterations:.2f}")
-
-    # --- VISUALIZATION ---
-    fig, ax1 = plt.subplots(figsize=(10, 6))
-
-    # Plot 1: Fano Probability (The Phase Transition)
-    color = 'tab:red'
-    ax1.set_xlabel('Attachment Strength (Beta)')
-    ax1.set_ylabel('Probability of Fano Minor', color=color)
-    ax1.plot(beta_values, fano_probabilities, 'o-', color=color, linewidth=3, label='P[F7]')
-    ax1.tick_params(axis='y', labelcolor=color)
-    ax1.grid(True, alpha=0.3)
-
-    # Plot 2: Independence Ratio (The Structural Compression)
-    ax2 = ax1.twinx() 
-    color = 'tab:blue'
-    ax2.set_ylabel('Independence Ratio (Rank / Rows)', color=color)
-    ax2.plot(beta_values, rank_ratios, 's--', color=color, alpha=0.6, label='r(M)/n')
-    ax2.tick_params(axis='y', labelcolor=color)
-
-    plt.title(f"Phase Transition in Growing Matroids\n(n={n_steps}, $\gamma$={gamma}, Swaps={swaps})")
-    fig.tight_layout()
+    # PLOT A: Zipf Distribution (Degree of Row Usage)
+    valid = counts > 0
+    ax1.loglog(ranks[valid], counts[valid], 'o', markersize=4, color='#1f77b4', alpha=0.5)
+    ax1.set_title(r"$\bf{A.}$ Degree Distribution (Zipf's Law)", fontsize=12)
+    ax1.set_xlabel("Row Rank (Log Scale)")
+    ax1.set_ylabel("Usage Frequency (Log Scale)")
+    ax1.grid(True, which="both", ls="--", alpha=0.5)
     
-    # Save the plot for the grant proposal
-    plt.savefig('experiments/phase_transition_plot.png')
-    print("\n[SUCCESS] Phase transition plot saved to experiments/phase_transition_plot.png")
+    # PLOT B: Structural Dilution (The Banal Effect)
+    # This now has access to 'temporal_nullity' defined in Step 2
+    times = [t['birth_window'][0] for t in temporal_nullity]
+    nulls = [t['nullity'] for t in temporal_nullity]
+    
+    ax2.plot(times, nulls, '-o', color='#d62728', markersize=5, linewidth=2)
+    ax2.fill_between(times, nulls, color='#d62728', alpha=0.1)
+    
+    ax2.set_title(r"$\bf{B.}$ Structural Dilution (Banal Effect)", fontsize=12)
+    ax2.set_xlabel("Column Birth Index (Time $t$)")
+    ax2.set_ylabel("Local Nullity (Dependency Density)")
+    ax2.grid(True, ls="--", alpha=0.5)
+
+    plt.tight_layout()
     plt.show()
 
 if __name__ == "__main__":
-    run_beta_sweep()
+    run_research_suite()
