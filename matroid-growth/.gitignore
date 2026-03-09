@@ -43,3 +43,6 @@ experiments/transition_*/
 # Exclude all experiment result folders starting with 'ex_'
 ex_*/
 heatmap_*/
+
+experiments/run_*/
+experiments/start_*/
