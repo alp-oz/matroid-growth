@@ -30,3 +30,9 @@ heatmap_*/
 # --- Test Scripts ---
 test_import.py
 test_*.py
+
+# --- Exclude unfinished/private folders ---
+quantum/
+
+# --- Cache files ---
+*.pkl

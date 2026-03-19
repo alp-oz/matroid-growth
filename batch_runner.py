@@ -46,22 +46,18 @@ def run_research_suite():
     ranks, counts = get_zipf_distribution(data['row_usage'])
     conn = get_bipartite_connectivity(data)
 
-    # 2b. Girth Estimation (New)
+    # 2b. Girth Estimation
     girth = estimate_girth(data['columns'], data['R_final'])
 
-    print(f"✅ Simulation Complete.")
-    print(f"Final Basis (R): {data['R_final']}")
-    print(f"Estimated Girth: {girth if girth else '8+'}") # Add this line
-    print(f"Active Connectivity: {conn['active_giant_fraction']:.2%}")
-    
     # Measuring the 'Banal Effect': how dependencies grow over time
     temporal_nullity = get_circuit_participation_by_birth(
         data, 
         window_size=CONFIG["WINDOW_SIZE"]
     )
 
-    print(f"✅ Simulation Complete.")
+    print(f"\n✅ Simulation Complete.")
     print(f"Final Basis (R): {data['R_final']}")
+    print(f"Estimated Girth: {girth if girth else '8+'}") 
     print(f"Active Connectivity: {conn['active_giant_fraction']:.2%}")
     print(f"Total Components: {conn['total_components']} (Orphans: {conn['orphan_rows']})")
 
@@ -69,8 +65,7 @@ def run_research_suite():
     plt.style.use('bmh')
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
     
-    # PLOT A: Zipf Distribution (Degree of Row Usage)
-    # 
+    # PLOT A: Zipf Distribution
     valid = counts > 0
     ax1.loglog(ranks[valid], counts[valid], 'o', markersize=4, color='#1f77b4', alpha=0.5)
     ax1.set_title(r"$\bf{A.}$ Degree Distribution (Zipf's Law)", fontsize=12)
@@ -78,7 +73,6 @@ def run_research_suite():
     ax1.set_ylabel("Usage Frequency (Log Scale)")
     
     # PLOT B: Structural Dilution (The Banal Effect)
-    # 
     times = [t['birth_window'][0] for t in temporal_nullity]
     nulls = [t['nullity'] for t in temporal_nullity]
     
