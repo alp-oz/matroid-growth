@@ -61,7 +61,14 @@ markov-circuits/
 git clone https://github.com/alp-oz/matroid-growth.git
 cd matroid-growth
 python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
+pip install -e .
+```
+
+This installs the package (`matroid_core`, `analysis`, `experiments`) and registers the `run-matroid` CLI entry point.
+
+Run the full batch simulation:
+```bash
+run-matroid
 ```
 
 Run the phase transition experiment:
