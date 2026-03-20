@@ -27,6 +27,7 @@ Fit log(δ) vs log(n): slope α.
 """
 import numpy as np
 import random
+import pickle
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from scipy.optimize import curve_fit
@@ -35,6 +36,9 @@ from markov_chain import fundamental_circuits, decompose_into_circuits
 from qecc_comparison import bicycle_code, h_to_matroid
 from hgp_code import hgp, c523, rep
 from toric_code import toric_to_matroid
+from bp_code import bb_code
+from fb_code import fb_code
+from qt_code import build_psl2, qt_code, find_gen_index, mat_inv_mod
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -358,6 +362,71 @@ def build_sweep():
         M, r, n = h_to_matroid(H_X)
         instances.append((f"HGP(C523,rep{L})", M, r, n, "HGP"))
 
+    # Bivariate Bicycle (Balanced Product):
+    #   BB(3,3): n=18, k=4  — small, exact gap available for cross-validation
+    #   BB(6,3): n=36, k=8  — medium
+    #   BB(6,6) IBM [[72,12,6]]: n=144, k=12 — too large for exact, empirical only
+    for l, m, a_sh, b_sh in [
+        (3, 3, [(0,0),(1,0),(0,1)], [(0,0),(2,0),(0,2)]),   # n=18, k=4
+        (6, 3, [(0,0),(2,0),(0,1)], [(0,0),(4,0),(0,2)]),   # n=36, k=8
+        (6, 6, [(3,0),(0,1),(0,2)], [(0,3),(1,0),(2,0)]),   # n=144, k=12 (IBM)
+    ]:
+        try:
+            H_X, _ = bb_code(l, m, a_sh, b_sh)
+            M, r, n = h_to_matroid(H_X)
+            instances.append((f"BB({l},{m}) n={n}", M, r, n, "BB"))
+        except AssertionError:
+            print(f"  BB({l},{m}): CSS check failed, skipping.")
+
+    # Fiber Bundle — three families (toric baseline excluded; same as Toric)
+    #   uniform shift k=1, alternating [0,1,...], random seed=42
+    rng_fb = np.random.default_rng(42)
+    fb_instances = [
+        ("FB-uniform(3,3)",  3, 3, [1]*3),
+        ("FB-uniform(5,5)",  5, 5, [1]*5),
+        ("FB-uniform(6,6)",  6, 6, [1]*6),
+        ("FB-alt(4,4)",      4, 4, [i%2 for i in range(4)]),
+        ("FB-alt(6,6)",      6, 6, [i%2 for i in range(6)]),
+        ("FB-alt(8,6)",      8, 6, [i%2 for i in range(8)]),
+        ("FB-rand(4,4)",     4, 4, rng_fb.integers(0,4,size=4).tolist()),
+        ("FB-rand(5,5)",     5, 5, rng_fb.integers(0,5,size=5).tolist()),
+        ("FB-rand(6,6)",     6, 6, rng_fb.integers(0,6,size=6).tolist()),
+    ]
+    for label, r_fb, s_fb, shifts in fb_instances:
+        try:
+            H_X, _ = fb_code(r_fb, s_fb, shifts)
+            M, r, n = h_to_matroid(H_X)
+            instances.append((f"{label} n={n}", M, r, n, "FB"))
+        except AssertionError as e:
+            print(f"  {label}: CSS check failed — {e}, skipping.")
+
+    # Quantum Tanner: PSL(2,3) and PSL(2,5) with |A|=|B|=2 and 3
+    for p in [3, 5]:
+        elems, elem_index, mul_table = build_psl2(p)
+        G = len(elems)
+        s_mat     = np.array([[1, 1], [0, 1]])
+        t_mat     = np.array([[0, p-1], [1, 0]])
+        s_inv_mat = mat_inv_mod(s_mat, p)
+        s_idx  = find_gen_index(s_mat, p, elem_index)
+        si_idx = find_gen_index(s_inv_mat, p, elem_index)
+        t_idx  = find_gen_index(t_mat, p, elem_index)
+        if None in (s_idx, si_idx, t_idx):
+            continue
+        for A_idx, B_idx, glab in [
+            ([s_idx, si_idx], [s_idx, si_idx], f"|A|=2"),
+            ([s_idx, si_idx, t_idx], [s_idx, si_idx, t_idx], f"|A|=3"),
+        ]:
+            n_exp = G * (len(A_idx) + len(B_idx))
+            if n_exp > 250:
+                continue
+            label = f"QT-PSL(2,{p}) {glab} n={n_exp}"
+            try:
+                H_X, _ = qt_code(mul_table, A_idx, B_idx)
+                M, r, n = h_to_matroid(H_X)
+                instances.append((label, M, r, n, "QT"))
+            except AssertionError as e:
+                print(f"  {label}: CSS failed — {e}")
+
     return instances
 
 
@@ -365,8 +434,9 @@ def build_sweep():
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
 
-FAM_COL = {"Bicycle": "#2ca02c", "Toric": "#1f77b4", "HGP": "#9467bd"}
-FAM_MKR = {"Bicycle": "s", "Toric": "o", "HGP": "^"}
+FAM_COL = {"Bicycle": "#2ca02c", "Toric": "#1f77b4", "HGP": "#9467bd",
+           "BB": "#e74c3c", "FB": "#ff7f0e", "QT": "#8c564b"}
+FAM_MKR = {"Bicycle": "s", "Toric": "o", "HGP": "^", "BB": "D", "FB": "P", "QT": "*"}
 
 if __name__ == "__main__":
     random.seed(42); np.random.seed(42)
@@ -395,6 +465,32 @@ if __name__ == "__main__":
         print(f"\r  {label:<24}  {n:>4}  {N_s:>7}  {gap_s:>10}  "
               f"{dauto_s:>8}  {tau_s:>7}  {dcoup_s:>10}  {tcouple_s:>9}")
 
+    # Save full results (for plot regeneration)
+    cache = "markov-circuits/gap_scaling_results.pkl"
+    with open(cache, "wb") as f:
+        pickle.dump(results, f)
+    print(f"\nResults cached → {cache}")
+
+    # Save compact tabular JSON (key metrics only)
+    import json
+    compact = []
+    for res in results:
+        compact.append({
+            "label":       res["label"],
+            "family":      res["family"],
+            "n":           res["n"],
+            "N":           res["N"],
+            "gap_exact":   res["gap_exact"],
+            "delta_ind":   round(res["delta_ind"], 5),
+            "tau":         round(res["tau"], 2),
+            "delta_coup":  round(res["delta_coup"], 5),
+            "t_couple":    round(res["t_couple_mean"], 1),
+        })
+    json_out = "markov-circuits/gap_scaling_results.json"
+    with open(json_out, "w") as f:
+        json.dump(compact, f, indent=2)
+    print(f"Compact table  → {json_out}")
+
     # ── Fit gap vs n ──────────────────────────────────────────────────────────
     print("\nPower-law fits  δ ~ n^(-α)  per family:")
     print(f"  {'family':<10}  {'estimator':<12}  α (slope)   R²")
@@ -402,7 +498,7 @@ if __name__ == "__main__":
 
     def powerlaw(log_n, log_a, alpha): return log_a - alpha * log_n
 
-    for family in ["Bicycle", "Toric", "HGP"]:
+    for family in ["Bicycle", "Toric", "HGP", "BB", "FB", "QT"]:
         fam_res = [r for r in results if r["family"] == family]
         if len(fam_res) < 3: continue
         ns = np.array([r["n"] for r in fam_res], dtype=float)
@@ -448,7 +544,7 @@ if __name__ == "__main__":
 
     # ── Panel 2: log-log exact gap ────────────────────────────────────────────
     ax2 = fig.add_subplot(gs[0, 1])
-    for family in ["Bicycle", "Toric", "HGP"]:
+    for family in ["Bicycle", "Toric", "HGP", "BB", "FB", "QT"]:
         fam_res = [r for r in results if r["family"] == family
                    and r["gap_exact"] is not None and r["gap_exact"] > 1e-6]
         if not fam_res: continue
@@ -468,7 +564,7 @@ if __name__ == "__main__":
 
     # ── Panel 3: δ_auto vs n (log-log) ───────────────────────────────────────
     ax3 = fig.add_subplot(gs[0, 2])
-    for family in ["Bicycle", "Toric", "HGP"]:
+    for family in ["Bicycle", "Toric", "HGP", "BB", "FB", "QT"]:
         fam_res = [r for r in results if r["family"] == family
                    and r["delta_ind"] > 1e-6]
         if not fam_res: continue
