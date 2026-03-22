@@ -15,7 +15,10 @@ dist/
 *.csv
 *.log
 *.npy
-results/
+
+# --- Results: track JSON (data), ignore binaries ---
+results/*.pkl
+figures/
 
 # --- Experiment Folder Rules ---
 # This catches all your specific research sub-folders

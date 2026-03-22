@@ -1,0 +1,191 @@
+[
+  {
+    "label": "Toric L=2",
+    "family": "Toric",
+    "n": 8,
+    "k_logical": 2,
+    "d_Z": 2,
+    "A_logical_z": {
+      "2": 2,
+      "4": 1
+    },
+    "T_cover": 6,
+    "T_converge": 10006,
+    "q": 0.3
+  },
+  {
+    "label": "Toric L=3",
+    "family": "Toric",
+    "n": 18,
+    "k_logical": 2,
+    "d_Z": 3,
+    "A_logical_z": {
+      "3": 2,
+      "6": 1
+    },
+    "T_cover": 6,
+    "T_converge": 10039,
+    "q": 0.3
+  },
+  {
+    "label": "Toric L=4",
+    "family": "Toric",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 2,
+      "8": 1
+    },
+    "T_cover": 160,
+    "T_converge": 10449,
+    "q": 0.3
+  },
+  {
+    "label": "Toric L=5",
+    "family": "Toric",
+    "n": 50,
+    "k_logical": 2,
+    "d_Z": 5,
+    "A_logical_z": {
+      "10": 1,
+      "5": 2
+    },
+    "T_cover": 469,
+    "T_converge": 13718,
+    "q": 0.3
+  },
+  {
+    "label": "FB-toric(4,4)",
+    "family": "FB",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 2,
+      "8": 1
+    },
+    "T_cover": 145,
+    "T_converge": 11508,
+    "q": 0.3
+  },
+  {
+    "label": "FB-uniform(4,4)",
+    "family": "FB",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 2,
+      "8": 1
+    },
+    "T_cover": 206,
+    "T_converge": 13949,
+    "q": 0.3
+  },
+  {
+    "label": "FB-alt(4,4)[0101]",
+    "family": "FB",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 1,
+      "6": 2
+    },
+    "T_cover": 148,
+    "T_converge": 10703,
+    "q": 0.3
+  },
+  {
+    "label": "FB-alt(4,4)[0011]",
+    "family": "FB",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 1,
+      "6": 2
+    },
+    "T_cover": 166,
+    "T_converge": 10174,
+    "q": 0.3
+  },
+  {
+    "label": "FB-alt(4,4)[0123]",
+    "family": "FB",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 1,
+      "6": 2
+    },
+    "T_cover": 155,
+    "T_converge": 10270,
+    "q": 0.3
+  },
+  {
+    "label": "FB-alt(4,4)[0202]",
+    "family": "FB",
+    "n": 32,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 2,
+      "8": 1
+    },
+    "T_cover": 158,
+    "T_converge": 11974,
+    "q": 0.3
+  },
+  {
+    "label": "FB-large(6,4)[010101]",
+    "family": "FB",
+    "n": 48,
+    "k_logical": 2,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 1,
+      "9": 1,
+      "7": 1
+    },
+    "T_cover": 5929,
+    "T_converge": 23765,
+    "q": 0.3
+  },
+  {
+    "label": "BB(3,3)",
+    "family": "BB",
+    "n": 18,
+    "k_logical": 4,
+    "d_Z": 4,
+    "A_logical_z": {
+      "4": 15
+    },
+    "T_cover": 211,
+    "T_converge": 10530,
+    "q": 0.3
+  },
+  {
+    "label": "BB(6,6) IBM [[72,12,6]]",
+    "family": "BB",
+    "n": 72,
+    "k_logical": 12,
+    "d_Z": 6,
+    "A_logical_z": {
+      "12": 1249,
+      "8": 152,
+      "10": 448,
+      "6": 44,
+      "14": 1295,
+      "16": 689,
+      "18": 177,
+      "20": 32,
+      "22": 9
+    },
+    "T_cover": 1800596,
+    "T_converge": 1863703,
+    "q": 0.3
+  }
+]

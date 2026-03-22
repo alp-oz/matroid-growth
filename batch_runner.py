@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # --- CORE IMPORTS ---
 # These now utilize the formalized package structure you created
-from matroid_core.engine import MatroidEngine
+from core.engine import MatroidEngine
 from analysis.stats import get_zipf_distribution
 from analysis.connectivity import get_bipartite_connectivity
 from analysis.circuits import estimate_girth, get_circuit_participation_by_birth

@@ -22,10 +22,28 @@ The framework studies two lines of investigation:
 ## Structure
 
 ```
-matroid_core/
-  engine.py          PA binary matroid generator
+core/
+  engine.py          PA binary matroid generator (preferential attachment)
   fields.py          GF(2) arithmetic
   minors.py          Forbidden minors (F7, W3, U2,4)
+  markov_chain.py    Chain step, fundamental circuits, GF(2) decomposition
+  circuits.py        BFS circuit enumeration, irreducibility check
+  stationary.py      Exact transition matrix and stationary distribution
+  mixing.py          Spectral gap, TV distance
+
+chains/
+  xor_decompose_walk.py    Chain 1: XOR-Decompose Walk (non-uniform stationary)
+  mh_walk.py               Chain 2: Min-Metropolis Walk (uniform stationary)
+  codeword_walk.py         Chain 3: Codeword Walk on ker(H_X)\{0}
+  coset_descent_chain.py   Chain 4: Biased Codeword Walk for d_Z and A_logical(z)
+
+codes/
+  toric_code.py      Toric code
+  bb_code.py         Bivariate bicycle (balanced product) codes
+  fb_code.py         Fiber bundle codes (twisted C_r × C_s)
+  hgp_code.py        Hypergraph product codes
+  qt_code.py         Quantum Tanner codes (left-right Cayley complex, PSL(2,p))
+  qecc_comparison.py Chain analysis utilities and code constructors
 
 analysis/
   probe_minors.py    Bitset-based minor detection and rank computation
@@ -34,27 +52,15 @@ analysis/
   stats.py           Zipf distribution and entropy metrics
 
 experiments/
-  phase_transition_v2.py   Rank deficit, Gini coefficient, girth vs β and d
-  zipf_plot.py             Zipf's law in row usage across β values
-  threshold_phenomena.py   Rank saturation and minor appearance thresholds
+  pa/          Phase transitions in PA matroids
+  gap/         Spectral gap scaling (Chain 1 and Chain 2)
+  mixing/      Codeword walk mixing and coset descent convergence
+  stationary/  Stationary distribution analysis for Chain 1
+  coset/       Chain 4 survey across all code families
+  misc/        Asymptotic analysis, multi-family comparisons
 
-markov-circuits/
-  markov_chain.py      Chain step, fundamental circuits, GF(2) decomposition
-  analysis.py          BFS circuit enumeration, irreducibility check
-  stationary.py        Exact transition matrix and stationary distribution
-  mixing.py            Spectral gap, TV distance
-  toric_code.py        Toric code as binary matroid
-  hgp_code.py          Hypergraph product (HGP) codes
-  bp_code.py           Bivariate bicycle (balanced product) codes
-  fb_code.py           Fiber bundle codes (twisted C_r × C_s complex)
-  qt_code.py           Quantum Tanner codes (left-right Cayley complex, PSL(2,p))
-  qecc_comparison.py   Chain analysis utilities shared across families
-  gap_scaling.py       Full gap scaling sweep — all 6 families
-  consolidate.py       Consolidation figure from saved JSON results
-  qecc_properties.py   PDF summary: QECC properties and weight enumerator
-  gap_scaling_results.json  Compact tabular results (all families)
-  fb_params.json       Fiber bundle [[n,k]] parameters
-  qt_params.json       Quantum Tanner [[n,k]] parameters
+results/       JSON and pickle output from all experiments
+figures/       All generated plots
 ```
 
 ---
@@ -70,15 +76,15 @@ pip install -e .
 
 Run the phase transition and threshold experiments:
 ```bash
-python experiments/phase_transition_v2.py
-python experiments/threshold_phenomena.py
-python experiments/zipf_plot.py
+python experiments/pa/phase_transition_v2.py
+python experiments/pa/threshold_phenomena.py
+python experiments/pa/zipf_plot.py
 ```
 
 Run the full Markov chain gap scaling study across all CSS code families:
 ```bash
-python markov-circuits/gap_scaling.py      # takes ~20 min, saves results JSON
-python markov-circuits/consolidate.py      # regenerates figures from JSON instantly
+python experiments/gap/gap_scaling.py      # takes ~20 min, saves results JSON
+python plots/consolidate.py                # regenerates figures from JSON instantly
 ```
 
 ---
@@ -110,6 +116,10 @@ python markov-circuits/consolidate.py      # regenerates figures from JSON insta
 - Power-law exponents: FB (0.24) < Toric (0.36) < QT/Bicycle (0.46) < BB (0.50) < HGP (0.55)
 - Fiber bundle codes mix fastest; non-abelian group structure (PSL(2,5)) does not impede mixing
 - The weight enumerator A(z) is #P-hard exactly; poly(n) mixing would make MCMC approximation efficient
+- The Metropolis–Hastings correction (Chain 2) makes the stationary distribution exactly uniform, at the cost of a larger ratio gap_chain1/gap_MH ≈ 3× for Toric L=2 and 8× for Toric L=3, indicating Chain 1 mixes faster but is biased
+- Chain 3 (Codeword Walk) walks all 2^k−1 nonzero codewords of ker(H_X) uniformly — a random walk on GF(2)^k with generating set {fc[j]}, not the standard hypercube walk. Gap scales as α≈1.09 across 4 families (Toric-only: α≈0.92), slower than Chain 1 (α≈0.42 across families, α≈0.36 Toric-only), due to a geometric bottleneck between cosets of row_span(H_Z) inside ker(H_X). Both α values use the empirical 1/τ autocorrelation estimator and are directly comparable; Chain 2 gap scaling (α≈1.48) is measured from exact spectral gaps on small codes only and is not on the same scale
+- Chain 4 (Coset Descent Chain, parameter q=0.3) adds MH bias proportional to q^{wt(c)}, concentrating near low-weight codewords. Combined with coset label tracking from H_Z, it estimates A_logical(z) — the coset weight enumerator — which governs decoding performance more precisely than distance d alone
+- Key A_logical(z) results: Toric A_logical(z) = 2z^L + z^{2L} for L=2,3,4,5; BB(3,3) has A_logical(z) = 15z^4 (all 15 non-trivial cosets at equal minimum weight 4); IBM [[72,12,6]] is bell-shaped over 4095 cosets with only 1.1% at minimum weight 6 and peak at weight 14 — quantitative explanation of strong decoding performance beyond d=6
 
 ---
 

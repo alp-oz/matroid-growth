@@ -1,5 +1,5 @@
 import numpy as np
-from matroid_core.fields import GF2
+from core.fields import GF2
 
 def get_circuit_participation_by_birth(matroid_data, window_size=500):
     """

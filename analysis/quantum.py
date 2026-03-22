@@ -1,5 +1,5 @@
 # analysis/quantum.py
-from matroid_core.fields import GF2
+from core.fields import GF2
 
 def evaluate_css_code(matroid_data):
     """

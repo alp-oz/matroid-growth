@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["matroid_core", "analysis", "experiments"]
+packages = ["core", "chains", "codes", "analysis"]
 py-modules = ["batch_runner"]
 
 [project.scripts]
