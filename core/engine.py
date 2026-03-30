@@ -77,7 +77,9 @@ class MatroidEngine:
         return {
             "M": M,
             "r": r,                               # rank = #basis elements
+            "R_final": r,                         # alias for legacy scripts
             "n": n,                               # total #elements
             "attachment_supports": self.attachment_supports,
+            "columns": self.attachment_supports,  # alias for legacy scripts
             "row_usage": self.row_usage,
         }
