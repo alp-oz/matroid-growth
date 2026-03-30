@@ -1,0 +1,62 @@
+{
+  "params_key": {
+    "alpha": 0.3,
+    "lam": 0.05,
+    "gamma": 0.0,
+    "beta": 0.5,
+    "start_r": 10,
+    "n_list": [
+      20,
+      30,
+      40,
+      50,
+      60,
+      80
+    ],
+    "reps": 30
+  },
+  "results": [
+    {
+      "n": 20,
+      "tau_mean": 36.18598528329131,
+      "tau_std": 26.595793391393276,
+      "frac_largest_mean": 0.99,
+      "n_valid": 30
+    },
+    {
+      "n": 30,
+      "tau_mean": 31.53202316800459,
+      "tau_std": 17.479160838670897,
+      "frac_largest_mean": 1.0,
+      "n_valid": 30
+    },
+    {
+      "n": 40,
+      "tau_mean": 21.079366714133194,
+      "tau_std": 7.385437275147419,
+      "frac_largest_mean": 0.9991666666666668,
+      "n_valid": 30
+    },
+    {
+      "n": 50,
+      "tau_mean": 23.124523594796155,
+      "tau_std": 18.261103425019563,
+      "frac_largest_mean": 1.0,
+      "n_valid": 30
+    },
+    {
+      "n": 60,
+      "tau_mean": 29.337015717423103,
+      "tau_std": 30.794005174751852,
+      "frac_largest_mean": 1.0,
+      "n_valid": 30
+    },
+    {
+      "n": 80,
+      "tau_mean": 21.595377367079735,
+      "tau_std": 15.529258958429464,
+      "frac_largest_mean": 1.0,
+      "n_valid": 30
+    }
+  ]
+}

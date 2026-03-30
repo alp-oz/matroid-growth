@@ -1,0 +1,173 @@
+[
+  {
+    "label": "Toric L=2",
+    "family": "Toric",
+    "n": 8,
+    "k_dim": 5,
+    "N_cw": 31,
+    "delta": 0.05515754,
+    "method": "exact"
+  },
+  {
+    "label": "Toric L=3",
+    "family": "Toric",
+    "n": 18,
+    "k_dim": 10,
+    "N_cw": 1023,
+    "delta": 0.01702501,
+    "method": "exact"
+  },
+  {
+    "label": "Toric L=4",
+    "family": "Toric",
+    "n": 32,
+    "k_dim": 17,
+    "N_cw": 131071,
+    "delta": 0.02205433,
+    "method": "empirical"
+  },
+  {
+    "label": "Toric L=5",
+    "family": "Toric",
+    "n": 50,
+    "k_dim": 26,
+    "N_cw": 67108863,
+    "delta": 0.00517425,
+    "method": "empirical"
+  },
+  {
+    "label": "Bicycle r=6",
+    "family": "Bicycle",
+    "n": 12,
+    "k_dim": 6,
+    "N_cw": 63,
+    "delta": 0.03658695,
+    "method": "exact"
+  },
+  {
+    "label": "Bicycle r=9",
+    "family": "Bicycle",
+    "n": 18,
+    "k_dim": 9,
+    "N_cw": 511,
+    "delta": 0.01370361,
+    "method": "exact"
+  },
+  {
+    "label": "Bicycle r=12",
+    "family": "Bicycle",
+    "n": 24,
+    "k_dim": 12,
+    "N_cw": 4095,
+    "delta": 0.00213711,
+    "method": "exact"
+  },
+  {
+    "label": "Bicycle r=15",
+    "family": "Bicycle",
+    "n": 30,
+    "k_dim": 15,
+    "N_cw": 32767,
+    "delta": 0.0078141,
+    "method": "empirical"
+  },
+  {
+    "label": "Bicycle r=18",
+    "family": "Bicycle",
+    "n": 36,
+    "k_dim": 18,
+    "N_cw": 262143,
+    "delta": 0.00274844,
+    "method": "empirical"
+  },
+  {
+    "label": "BB(3,3)",
+    "family": "BB",
+    "n": 18,
+    "k_dim": 11,
+    "N_cw": 2047,
+    "delta": 0.0051013,
+    "method": "exact"
+  },
+  {
+    "label": "BB(6,3)",
+    "family": "BB",
+    "n": 36,
+    "k_dim": 22,
+    "N_cw": 4194303,
+    "delta": 0.00605921,
+    "method": "empirical"
+  },
+  {
+    "label": "HGP(C523,rep3)",
+    "family": "HGP",
+    "n": 21,
+    "k_dim": 12,
+    "N_cw": 4095,
+    "delta": 0.01828721,
+    "method": "exact"
+  },
+  {
+    "label": "HGP(C523,rep4)",
+    "family": "HGP",
+    "n": 29,
+    "k_dim": 17,
+    "N_cw": 131071,
+    "delta": 0.03335991,
+    "method": "empirical"
+  },
+  {
+    "label": "HGP(C523,rep5)",
+    "family": "HGP",
+    "n": 37,
+    "k_dim": 22,
+    "N_cw": 4194303,
+    "delta": 0.02678956,
+    "method": "empirical"
+  },
+  {
+    "label": "FB-uniform(3,3)",
+    "family": "FB",
+    "n": 18,
+    "k_dim": 10,
+    "N_cw": 1023,
+    "delta": 0.01190384,
+    "method": "exact"
+  },
+  {
+    "label": "FB-alt(4,4)",
+    "family": "FB",
+    "n": 32,
+    "k_dim": 17,
+    "N_cw": 131071,
+    "delta": 0.02091124,
+    "method": "empirical"
+  },
+  {
+    "label": "FB-alt(6,6)",
+    "family": "FB",
+    "n": 72,
+    "k_dim": 37,
+    "N_cw": 137438953471,
+    "delta": 0.00217765,
+    "method": "empirical"
+  },
+  {
+    "label": "QT-PSL(2,3) |A|=2",
+    "family": "QT",
+    "n": 48,
+    "k_dim": 22,
+    "N_cw": 4194303,
+    "delta": 0.02534107,
+    "method": "empirical"
+  },
+  {
+    "label": "QT-PSL(2,3) |A|=3",
+    "family": "QT",
+    "n": 72,
+    "k_dim": 18,
+    "N_cw": 262143,
+    "delta": 0.00901161,
+    "method": "empirical"
+  }
+]

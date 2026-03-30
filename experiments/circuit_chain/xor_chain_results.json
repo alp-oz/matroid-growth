@@ -1,0 +1,21 @@
+{
+  "params": {
+    "alpha": 0.3,
+    "lambda": 0.05,
+    "gamma": 0.0,
+    "n_steps": 1000,
+    "start_r": 10,
+    "reps": 5,
+    "betas": [0.5, 0.8, 1.0, 1.1, 1.2, 1.5],
+    "beta_star": 1.10
+  },
+  "summary": [
+    {"beta": 0.5,  "n_att_mean": 949, "n_comp_mean": 24.6,  "frac_largest_mean": 0.975, "delta_mean": 0.00051, "tau_mean": 16208},
+    {"beta": 0.8,  "n_att_mean": 955, "n_comp_mean": 311.4, "frac_largest_mean": 0.675, "delta_mean": 0.00049, "tau_mean": 16095},
+    {"beta": 1.0,  "n_att_mean": 952, "n_comp_mean": 654.2, "frac_largest_mean": 0.314, "delta_mean": 0.00041, "tau_mean": 18014},
+    {"beta": 1.1,  "n_att_mean": 952, "n_comp_mean": 678.8, "frac_largest_mean": 0.288, "delta_mean": 0.00043, "tau_mean": 16178},
+    {"beta": 1.2,  "n_att_mean": 946, "n_comp_mean": 803.0, "frac_largest_mean": 0.152, "delta_mean": 0.00032, "tau_mean": 28184},
+    {"beta": 1.5,  "n_att_mean": 949, "n_comp_mean": 850.8, "frac_largest_mean": 0.102, "delta_mean": 0.00016, "tau_mean": 63159}
+  ],
+  "note": "per-replicate arrays not stored (only means available from original run)"
+}
